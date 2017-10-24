@@ -9,6 +9,7 @@ class ScreenshotsPluginExtension {
     def recordDir = "screenshots"
     def addCompileDeps = true
 
+    def testPackage = ""
     def pythonExecutable = "python"
 
     // Only used for the pullScreenshotsFromDirectory task
@@ -52,7 +53,7 @@ class ScreenshotsPlugin implements Plugin<Project> {
           executable = project.screenshots.pythonExecutable
           environment('PYTHONPATH', jarFile)
 
-          args = ['-m', 'android_screenshot_tests.pull_screenshots', "--apk", output.toString()]
+          args = ['-m', 'android_screenshot_tests.pull_screenshots', "--package", project.screenshots.testPackage]
 
           def referenceDir = project.screenshots.referenceDir
           if(referenceDir) {
@@ -146,13 +147,6 @@ class ScreenshotsPlugin implements Plugin<Project> {
         verifyMode = true
       }
     }
-  }
-
-  String getTestApkOutput(Project project) {
-
-    return project.tasks.getByPath(project.screenshots.testApkTarget).getOutputs().getFiles().filter {
-      it.getAbsolutePath().endsWith ".apk"
-    }.getSingleFile().getAbsolutePath()
   }
 
   void printPullFromDirectoryUsage(def logger, def referenceDir, def targetPackage) {

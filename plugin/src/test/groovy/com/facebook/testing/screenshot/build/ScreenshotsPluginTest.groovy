@@ -95,17 +95,6 @@ class ScreenshotsPluginTest {
   }
 
   @Test
-  public void testUsesTestApk() {
-    def plugin = new ScreenshotsPlugin()
-    project.getPluginManager().apply 'com.android.application'
-    project.getPluginManager().apply ScreenshotsPluginForTest
-    setupProject()
-    project.evaluate()
-
-    assert plugin.getTestApkOutput(project).contains("androidTest")
-  }
-
-  @Test
   public void testCanSetApkTarget() {
     def plugin = new ScreenshotsPlugin()
     project.getPluginManager().apply 'com.android.application'

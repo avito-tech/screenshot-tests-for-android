@@ -11,7 +11,6 @@ class ScreenshotsPluginExtension {
 
     def testPackage = ""
     def pythonExecutable = "python"
-    Closure pythonResolver = null
 
     // Only used for the pullScreenshotsFromDirectory task
     def referenceDir = ""
@@ -29,11 +28,6 @@ class ScreenshotsPluginExtension {
 
 class ScreenshotsPlugin implements Plugin<Project> {
   void apply(Project project) {
-
-    def resolvePython = {
-      project.screenshots.pythonResolver ? project.screenshots.pythonResolver() : project.screenshots.pythonExecutable
-    }
-
     project.extensions.create("screenshots", ScreenshotsPluginExtension)
 
     def recordMode = false
@@ -56,7 +50,7 @@ class ScreenshotsPlugin implements Plugin<Project> {
         project.exec {
           def output = getTestApkOutput(project)
 
-          executable = resolvePython()
+          executable = project.screenshots.pythonExecutable
           environment('PYTHONPATH', jarFile)
 
           args = ['-m', 'android_screenshot_tests.pull_screenshots', "--package", project.screenshots.testPackage]
@@ -81,7 +75,7 @@ class ScreenshotsPlugin implements Plugin<Project> {
       doLast {
         project.exec {
 
-          executable = resolvePython()
+          executable = project.screenshots.pythonExecutable
           environment('PYTHONPATH', jarFile)
 
           def referenceDir = project.screenshots.referenceDir

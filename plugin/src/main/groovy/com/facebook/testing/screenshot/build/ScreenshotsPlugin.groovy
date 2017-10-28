@@ -48,8 +48,6 @@ class ScreenshotsPlugin implements Plugin<Project> {
       description = "Pull screenshots from the device"
       doLast {
         project.exec {
-          def output = getTestApkOutput(project)
-
           executable = project.screenshots.pythonExecutable
           environment('PYTHONPATH', jarFile)
 
